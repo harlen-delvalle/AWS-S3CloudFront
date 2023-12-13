@@ -40,5 +40,9 @@ jobs:
       - name: Terraform Apply
         run: terraform apply -auto-approve
 
+      - name: Check for failure and initiate destroy on failure
+        if: failure()
+        run: terraform destroy -auto-approve
+
       #- name: Terraform Destroy
       #  run: terraform destroy -auto-approve
