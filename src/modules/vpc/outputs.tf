@@ -11,10 +11,10 @@ output "cc_public_subnets" {
   ]
 }
 
-output "cc_private_subnets" {
+/*output "cc_private_subnets" {
   description = "Will be used by RDS Module to set subnet_ids"
   value = [
     aws_subnet.ccPrivateSubnet1,
     aws_subnet.ccPrivateSubnet2
   ]
-}
+}*/
