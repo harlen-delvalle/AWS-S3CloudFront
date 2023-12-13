@@ -23,6 +23,7 @@ resource "aws_subnet" "public_subnet_2" {
 resource "aws_security_group" "ecs_security_group" {
   name        = "ecs_security_group"
   description = "Allow traffic for ECS service"
+  vpc_id      = aws_vpc.my_vpc.id # Asociar la VPC al grupo de seguridad
 
   ingress {
     from_port   = 0
