@@ -113,3 +113,7 @@ resource "aws_ecs_service" "my_service" {
     container_port   = var.container_port
   }
 }
+
+resource "aws_internet_gateway" "my_igw" {
+  vpc_id = aws_vpc.my_vpc.id
+}
