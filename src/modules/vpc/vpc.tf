@@ -4,6 +4,7 @@ resource "aws_vpc" "ccVPC" {
   tags = {
     Name    = "ccVPC"
     Project = "CC TF Demo"
+    enable_dns_hostnames = "enable"
   }
 }
 
