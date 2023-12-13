@@ -1,10 +1,10 @@
 resource "aws_vpc" "ccVPC" {
   cidr_block       = var.vpc_cidr
+  enable_dns_hostnames = "enable"
   instance_tenancy = "default"
   tags = {
     Name    = "ccVPC"
-    Project = "CC TF Demo"
-    enable_dns_hostnames = "enable"
+    Project = "CC TF Demo"    
   }
 }
 
