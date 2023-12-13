@@ -15,7 +15,7 @@ resource "aws_internet_gateway" "ccIGW" {
   }
 }
 
-resource "aws_eip" "ccNatGatewayEIP1" {
+/* resource "aws_eip" "ccNatGatewayEIP1" {
   tags = {
     Name    = "ccNatGatewayEIP1"
     Project = "CC TF Demo"
@@ -28,7 +28,7 @@ resource "aws_nat_gateway" "ccNatGateway1" {
     Name    = "ccNatGateway1"
     Project = "CC TF Demo"
   }
-}
+} */
 resource "aws_subnet" "ccPublicSubnet1" {
   vpc_id            = aws_vpc.ccVPC.id
   cidr_block        = var.public_subnet_cidrs[0]
@@ -39,7 +39,7 @@ resource "aws_subnet" "ccPublicSubnet1" {
   }
 }
 
-resource "aws_eip" "ccNatGatewayEIP2" {
+/* resource "aws_eip" "ccNatGatewayEIP2" {
   tags = {
     Name    = "ccNatGatewayEIP2"
     Project = "CC TF Demo"
@@ -52,7 +52,7 @@ resource "aws_nat_gateway" "ccNatGateway2" {
     Name    = "ccNatGateway2"
     Project = "CC TF Demo"
   }
-}
+} */
 resource "aws_subnet" "ccPublicSubnet2" {
   vpc_id            = aws_vpc.ccVPC.id
   cidr_block        = var.public_subnet_cidrs[1]
@@ -63,7 +63,7 @@ resource "aws_subnet" "ccPublicSubnet2" {
   }
 }
 
-resource "aws_subnet" "ccPrivateSubnet1" {
+/* resource "aws_subnet" "ccPrivateSubnet1" {
   vpc_id            = aws_vpc.ccVPC.id
   cidr_block        = var.private_subnet_cidrs[0]
   availability_zone = var.availability_zones[0]
@@ -80,7 +80,7 @@ resource "aws_subnet" "ccPrivateSubnet2" {
     Name    = "ccPrivateSubnet2"
     Project = "CC TF Demo"
   }
-}
+} */
 
 resource "aws_route_table" "ccPublicRT" {
   vpc_id = aws_vpc.ccVPC.id
@@ -93,7 +93,7 @@ resource "aws_route_table" "ccPublicRT" {
     Project = "CC TF Demo"
   }
 }
-resource "aws_route_table" "ccPrivateRT1" {
+/*resource "aws_route_table" "ccPrivateRT1" {
   vpc_id = aws_vpc.ccVPC.id
   route {
     cidr_block     = "0.0.0.0/0"
@@ -114,7 +114,7 @@ resource "aws_route_table" "ccPrivateRT2" {
     Name    = "ccPrivateRT2"
     Project = "CC TF Demo"
   }
-}
+}*/
 
 resource "aws_route_table_association" "ccPublicRTassociation1" {
   subnet_id      = aws_subnet.ccPublicSubnet1.id
@@ -124,11 +124,11 @@ resource "aws_route_table_association" "ccPublicRTassociation2" {
   subnet_id      = aws_subnet.ccPublicSubnet2.id
   route_table_id = aws_route_table.ccPublicRT.id
 }
-resource "aws_route_table_association" "ccPrivateRTassociation1" {
+ /* resource "aws_route_table_association" "ccPrivateRTassociation1" {
   subnet_id      = aws_subnet.ccPrivateSubnet1.id
   route_table_id = aws_route_table.ccPrivateRT1.id
 }
 resource "aws_route_table_association" "ccPrivateRTassociation2" {
   subnet_id      = aws_subnet.ccPrivateSubnet2.id
   route_table_id = aws_route_table.ccPrivateRT2.id
-}
+} */
