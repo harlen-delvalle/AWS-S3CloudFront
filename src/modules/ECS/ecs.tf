@@ -25,7 +25,6 @@ resource "aws_subnet" "public_subnet_1" {
   vpc_id                  = aws_vpc.my_vpc.id
   cidr_block              = var.subnet_cidr_blocks[0]
   availability_zone       = "us-east-1a" # Cambia según tu región
-  map_public_ip_on_launch = true
   tags = {
     Name    = "public_subnet_1"
     Project = "CC TF Demo"
@@ -36,7 +35,6 @@ resource "aws_subnet" "public_subnet_2" {
   vpc_id                  = aws_vpc.my_vpc.id
   cidr_block              = var.subnet_cidr_blocks[1]
   availability_zone       = "us-east-1b" # Cambia según tu región
-  map_public_ip_on_launch = true
   tags = {
     Name    = "public_subnet_2"
     Project = "CC TF Demo"
