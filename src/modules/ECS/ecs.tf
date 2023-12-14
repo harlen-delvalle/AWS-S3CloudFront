@@ -172,12 +172,13 @@ resource "aws_ecs_service" "my_service" {
   network_configuration {
     subnets         = [aws_subnet.public_subnet_1.id, aws_subnet.public_subnet_2.id]
     security_groups = [aws_security_group.ecs_security_group.id]
+    assign_public_ip = true
   }
 
-  /*load_balancer {
+  load_balancer {
     target_group_arn = aws_lb_target_group.my_target_group.arn
     container_name   = "my-container"
     container_port   = var.container_port
-  }*/
+  }
 }
 
