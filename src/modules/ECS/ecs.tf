@@ -97,7 +97,7 @@ resource "aws_lb" "my_lb" {
   name               = "my-lb"
   internal           = false
   load_balancer_type = "application"
-  security_groups    = [aws_security_group.ecs_security_group.id]
+  security_groups    = [aws_security_group.default.id]
   subnets            = [aws_subnet.public_subnet_1.id, aws_subnet.public_subnet_2.id]
 }
 
