@@ -97,8 +97,8 @@ resource "aws_ecs_task_definition" "my_task" {
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
 
-  cpu    = "256"
-  memory = "512"
+  cpu    = "512"
+  memory = "1024"
 
   execution_role_arn = aws_iam_role.ecs_execution_role.arn
 
@@ -107,10 +107,17 @@ resource "aws_ecs_task_definition" "my_task" {
     image = var.container_image,
     portMappings = [
       {
-        containerPort = var.container_port,
-        hostPort      = var.container_port,
+        "containerPort" = var.container_port,
+        "hostPort"      = var.container_port,
       },
     ],
+    healthCheck = {
+      command     = ["CMD-SHELL", "curl -f http://localhost/health || exit 1"]
+      interval    = 30
+      timeout     = 5
+      startPeriod = 60
+      retries     = 3
+    }
   }])
 }
 
@@ -118,6 +125,7 @@ resource "aws_ecs_service" "my_service" {
   name            = "my-service"
   cluster         = aws_ecs_cluster.my_cluster.id
   task_definition = aws_ecs_task_definition.my_task.arn
+  desired_count = 2
   launch_type     = "FARGATE"
 
   network_configuration {
