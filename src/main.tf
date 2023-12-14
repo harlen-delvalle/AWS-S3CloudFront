@@ -33,7 +33,7 @@ module "s3_configuration" {
 
   bucket_name     = "nombre-de-tu-bucket" # Reemplaza con tu nombre de bucket
   index_document  = "index.html"
-  region          = "us-west-2" # Cambia según tu región
+  region          = "us-west-1" # Cambia según tu región
 }
 
 output "cloudfront_domain_name" {
