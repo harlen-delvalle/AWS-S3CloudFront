@@ -31,7 +31,7 @@ variable "task_family" {
 variable "container_image" {
   description = "Imagen del contenedor para la tarea ECS."
   type        = string
-  default     = "nginx:latest"
+  default     = "public.ecr.aws/nginx/nginx:latest"
 }
 
 variable "container_port" {
