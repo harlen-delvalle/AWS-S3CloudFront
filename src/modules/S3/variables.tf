@@ -10,5 +10,5 @@ variable "index_document" {
 
 variable "region" {
   description = "Región AWS"
-  default     = "us-west-2" # Cambia según tu región
+  default     = ""us-east-1" # Cambia según tu región
 }
