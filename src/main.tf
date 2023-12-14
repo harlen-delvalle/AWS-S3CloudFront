@@ -23,7 +23,21 @@ provider "aws" {
   availability_zones   = local.availability_zones
   public_subnet_cidrs  = local.public_subnet_cidrs
   private_subnet_cidrs = local.private_subnet_cidrs
-}*/
+}
 module "ecs" {
   source = "./modules/ECS"
+}*/
+
+module "s3_configuration" {
+  source = "./modules/s3" # Ruta al directorio del módulo S3
+
+  bucket_name     = "nombre-de-tu-bucket" # Reemplaza con tu nombre de bucket
+  index_document  = "index.html"
+  region          = "us-west-2" # Cambia según tu región
 }
+
+output "cloudfront_domain_name" {
+  description = "Nombre de dominio de CloudFront"
+  value       = module.s3_configuration.cloudfront_domain_name
+}
+
