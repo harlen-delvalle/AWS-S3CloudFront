@@ -174,10 +174,10 @@ resource "aws_ecs_service" "my_service" {
     security_groups = [aws_security_group.ecs_security_group.id]
   }
 
-  load_balancer {
+  /*load_balancer {
     target_group_arn = aws_lb_target_group.my_target_group.arn
     container_name   = "my-container"
     container_port   = var.container_port
-  }
+  }*/
 }
 
