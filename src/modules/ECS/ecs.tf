@@ -4,6 +4,21 @@ provider "aws" {
 
 resource "aws_vpc" "my_vpc" {
   cidr_block = var.vpc_cidr_block
+  enable_dns_hostnames = true
+  instance_tenancy = "default"
+  tags = {
+    Name    = "my_vpc"
+    Project = "CC TF Demo"    
+  }
+}
+
+
+resource "aws_internet_gateway" "my_igw" {
+  vpc_id = aws_vpc.my_vpc.id
+ tags = {
+    Name    = "my_igw"
+    Project = "CC TF Demo"
+  }
 }
 
 resource "aws_subnet" "public_subnet_1" {
@@ -11,6 +26,10 @@ resource "aws_subnet" "public_subnet_1" {
   cidr_block              = var.subnet_cidr_blocks[0]
   availability_zone       = "us-east-1a" # Cambia según tu región
   map_public_ip_on_launch = true
+  tags = {
+    Name    = "public_subnet_1"
+    Project = "CC TF Demo"
+  }
 }
 
 resource "aws_subnet" "public_subnet_2" {
@@ -18,6 +37,31 @@ resource "aws_subnet" "public_subnet_2" {
   cidr_block              = var.subnet_cidr_blocks[1]
   availability_zone       = "us-east-1b" # Cambia según tu región
   map_public_ip_on_launch = true
+  tags = {
+    Name    = "public_subnet_2"
+    Project = "CC TF Demo"
+  }
+}
+
+resource "aws_route_table" "PublicRT" {
+  vpc_id = aws_vpc.ccVPC.id
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.my_igw.id
+  }
+  tags = {
+    Name    = "PublicRT"
+    Project = "CC TF Demo"
+  }
+}
+
+resource "aws_route_table_association" "PublicRTassociation1" {
+  subnet_id      = aws_subnet.public_subnet_1.id
+  route_table_id = aws_route_table.PublicRT.id
+}
+resource "aws_route_table_association" "PublicRTassociation2" {
+  subnet_id      = aws_subnet.public_subnet_2.id
+  route_table_id = aws_route_table.PublicRT.id
 }
 
 resource "aws_security_group" "ecs_security_group" {
@@ -140,6 +184,3 @@ resource "aws_ecs_service" "my_service" {
   }
 }
 
-resource "aws_internet_gateway" "my_igw" {
-  vpc_id = aws_vpc.my_vpc.id
-}
