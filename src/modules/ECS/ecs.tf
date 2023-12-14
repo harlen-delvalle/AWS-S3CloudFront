@@ -68,16 +68,16 @@ resource "aws_security_group" "ecs_security_group" {
   vpc_id      = aws_vpc.my_vpc.id # Asociar la VPC al grupo de seguridad
 
   ingress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["10.0.0.0/8"] # Ajusta según tus necesidades
+    protocol    = "tcp"
+    from_port   = 80
+    to_port     = 80
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
+    protocol    = "-1"
     from_port   = 0
     to_port     = 0
-    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
