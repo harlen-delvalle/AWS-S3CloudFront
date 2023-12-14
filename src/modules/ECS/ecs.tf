@@ -53,6 +53,12 @@ resource "aws_lb_target_group" "my_target_group" {
   port     = var.container_port
   protocol = "HTTP"
   vpc_id   = aws_vpc.my_vpc.id
+
+  health_check {
+    path     = "/health"  # Ajusta según las necesidades de tu aplicación
+    port     = var.container_port
+    protocol = "HTTP"
+  }
 }
 
 resource "aws_ecs_cluster" "my_cluster" {
