@@ -1,77 +1,75 @@
 provider "aws" {
   region = var.region
 }
-resource "aws_s3_bucket" "bucket" {
-  bucket = "my-bucket-from-terraform"
-  #acl    = "private"
+
+
+module "s3_bucket" {
+  source = "terraform-aws-modules/s3-bucket/aws"
+
+  bucket = "my-s3-bucket"
+  acl    = "private"
+
+  control_object_ownership = true
+  object_ownership         = "ObjectWriter"
 }
 
-resource "aws_s3_bucket_object" "object" {
-  bucket = aws_s3_bucket.bucket.id
-  key    = "index.html"
-  source = "index.html"
-  content_type = "text/html"
+
+module "cloudfront" {
+  source = "terraform-aws-modules/cloudfront/aws"
+
+  comment             = "My awesome CloudFront"
+  enabled             = true
+
+  create_origin_access_control = true
+  origin_access_control = {
+    s3_oac = {
+      description      = "CloudFront access to S3"
+      origin_type      = "s3"
+      signing_behavior = "always"
+      signing_protocol = "sigv4"
+    }
+  }
+  origin = {
+    s3_oac = { # with origin access control settings (recommended)
+      domain_name           = module.s3_bucket.bucket_regional_domain_name
+      origin_access_control = "s3_oac" # key in `origin_access_control`
+    }
+  }
+
+  default_cache_behavior {
+    cache_policy_id  = "658327ea-f89d-4fab-a63d-7e88639e58f6" # CachingOptimized
+    allowed_methods  = ["GET", "HEAD", "OPTIONS"]
+    target_origin_id = "s3_oac" # key in `origin`
+  }
 }
 
-resource "aws_cloudfront_origin_access_identity" "oai" {
-  comment = "My OAI"
-}
 
 data "aws_iam_policy_document" "s3_policy" {
+  # Origin Access Identities
   statement {
     actions   = ["s3:GetObject"]
-    resources = ["${aws_s3_bucket.bucket.arn}/*"]
+    resources = ["${module.s3_bucket.s3_bucket_arn}/static/*"]
 
     principals {
       type        = "AWS"
-      identifiers = [aws_cloudfront_origin_access_identity.oai.iam_arn]
-    }
-  }
-}
-
-resource "aws_s3_bucket_policy" "confundus-policy" {
-  bucket = aws_s3_bucket.bucket.id
-  policy = data.aws_iam_policy_document.s3_policy.json
-}
-
-resource "aws_cloudfront_distribution" "distribution" {
-  origin {
-    domain_name = aws_s3_bucket.bucket.bucket_regional_domain_name
-    origin_id   = aws_s3_bucket.bucket.id
-    s3_origin_config {
-      origin_access_identity = aws_cloudfront_origin_access_identity.oai.cloudfront_access_identity_path
+      identifiers = module.cloudfront.cloudfront_origin_access_identity_iam_arns
     }
   }
 
-  enabled             = true
-  is_ipv6_enabled     = true
-  comment             = "My distribution"
-  default_root_object = "index.html"
+  # Origin Access Controls
+  statement {
+    actions   = ["s3:GetObject"]
+    resources = ["${module.s3_bucket.s3_bucket_arn}/static/*"]
 
-  default_cache_behavior {
-    allowed_methods  = ["GET", "HEAD", "OPTIONS"]
-    cached_methods   = ["GET", "HEAD", "OPTIONS"]
-    target_origin_id = aws_s3_bucket.bucket.id
-
-    viewer_protocol_policy = "redirect-to-https"
-
-    forwarded_values {
-      query_string = false
-
-      cookies {
-        forward = "none"
-      }
+    principals {
+      type        = "Service"
+      identifiers = ["cloudfront.amazonaws.com"]
     }
 
-  }
-
-  restrictions {
-    geo_restriction {
-      restriction_type = "none"
+    condition {
+      test     = "StringEquals"
+      variable = "aws:SourceArn"
+      values   = [module.cloudfront.cloudfront_distribution_arn]
     }
-  }
-
-  viewer_certificate {
-    cloudfront_default_certificate = true
   }
 }
