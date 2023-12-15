@@ -31,7 +31,7 @@ module "ecs" {
 }
 */
 
-module "s3_configuration" {
+module "S3" {
   source = "./modules/S3" # Ruta al directorio del módulo S3
   bucket_name     = "nombre-de-tu-bucket" # Reemplaza con tu nombre de bucket
   index_document  = "index.html"
