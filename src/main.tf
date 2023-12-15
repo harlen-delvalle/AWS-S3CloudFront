@@ -33,9 +33,3 @@ module "s3_configuration" {
   bucket_name     = "nombre-de-tu-bucket" # Reemplaza con tu nombre de bucket
   index_document  = "index.html"
 }
-
-output "cloudfront_domain_name" {
-  description = "Nombre de dominio de CloudFront"
-  value       = module.s3_configuration.cloudfront_domain_name
-}
-
