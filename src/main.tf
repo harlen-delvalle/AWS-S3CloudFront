@@ -24,12 +24,14 @@ provider "aws" {
   public_subnet_cidrs  = local.public_subnet_cidrs
   private_subnet_cidrs = local.private_subnet_cidrs
 }
-module "ecs" {
-  source = "./modules/ECS"
-}*/
+
 
 module "s3_configuration" {
   source = "./modules/S3" # Ruta al directorio del módulo S3
   bucket_name     = "nombre-de-tu-bucket" # Reemplaza con tu nombre de bucket
   index_document  = "index.html"
+}*/
+
+module "ecs" {
+  source = "./modules/ECS"
 }
