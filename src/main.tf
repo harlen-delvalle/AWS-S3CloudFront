@@ -30,10 +30,8 @@ module "ecs" {
 
 module "s3_configuration" {
   source = "./modules/S3" # Ruta al directorio del módulo S3
-
   bucket_name     = "nombre-de-tu-bucket" # Reemplaza con tu nombre de bucket
   index_document  = "index.html"
-  region          = "us-west-1" # Cambia según tu región
 }
 
 output "cloudfront_domain_name" {
