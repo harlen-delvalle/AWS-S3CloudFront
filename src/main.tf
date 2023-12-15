@@ -29,7 +29,7 @@ module "ecs" {
 }*/
 
 module "s3_configuration" {
-  source = "./modules/S3" # Ruta al directorio del módulo S3
+  source = "./modules/s3" # Ruta al directorio del módulo S3
   bucket_name     = "nombre-de-tu-bucket" # Reemplaza con tu nombre de bucket
   index_document  = "index.html"
 }
